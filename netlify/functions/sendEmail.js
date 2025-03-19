@@ -26,7 +26,7 @@ exports.handler = async (event) => {
 
         let mailOptions = {
             from: process.env.SMTP_USER,
-            to: "amandatayloro1070@outlook.com",
+            to: "amandataylor1070@outlook.com",
             subject: `New Contact Form Submission from ${message}`,
             text: `You have received a new message from ${message}`,
         };
