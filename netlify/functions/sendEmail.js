@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+/*const nodemailer = require("nodemailer");
 
 
 exports.handler = async (event) => {
@@ -45,7 +45,7 @@ exports.handler = async (event) => {
             body: JSON.stringify({ error: error.message }),
         };
     }
-};
+};*/
 
 
 
@@ -53,41 +53,69 @@ exports.handler = async (event) => {
 
 
 
+const nodemailer = require("nodemailer");
 
-
-
-/*exports.handler = async (event) => {
+exports.handler = async (event) => {
     try {
-        const { message } = JSON.parse(event.body);
+        // Ensure the method is POST
+        if (event.httpMethod !== "POST") {
+            return {
+                statusCode: 405,
+                body: JSON.stringify({ error: "Method Not Allowed" }),
+            };
+        }
 
-        // Outlook SMTP configuration
+        console.log("Received event:", event.body); // Log request data
+
+        // Parse the body of the request to extract form data
+        const formData = JSON.parse(event.body);
+
+        // Ensure that the necessary fields are present
+        if (!formData || Object.keys(formData).length === 0) {
+            return {
+                statusCode: 400,
+                body: JSON.stringify({ error: "Form data is missing or invalid." }),
+            };
+        }
+
+        // Create a transporter for sending the email using the SMTP details
         let transporter = nodemailer.createTransport({
-            host: "smtp.office365.com",
-            port: 587,
-            secure: false, // false for STARTTLS
+            host: process.env.SMTP_HOST,
+            port: process.env.SMTP_PORT,
+            secure: process.env.SMTP_PORT == 465, // true for 465, false for other ports
             auth: {
-                user: process.env.EMAIL_USERNAME, 
-                pass: process.env.EMAIL_PASSWORD, 
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
             },
         });
 
+        // Generate a message from all form data
+        let messageContent = "You have received a new form submission:\n\n";
+        for (const [key, value] of Object.entries(formData)) {
+            messageContent += `${key}: ${value}\n`; // Add each field name and value to the message
+        }
+
+        // Setup email data
         let mailOptions = {
-            from: process.env.EMAIL_USERNAME, 
-            to: "amandataylor1070@outlook.com", // Change to your email
-            subject: "New Contact Form Submission",
-            text: `Phrase: ${message}`,
+            from: process.env.SMTP_USER, // Sender's email
+            to: "elizabeth@crosskeyarchitect.com", // Recipient's email
+            subject: `New Contact Form Submission`, // Subject
+            text: messageContent, // Body content
         };
 
-        await transporter.sendMail(mailOptions);
+        // Send the email
+        let info = await transporter.sendMail(mailOptions);
+        console.log("Email sent:", info.response); // Log success message
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ message: "Email sent successfully!" }),
+            body: JSON.stringify({ success: "Email sent successfully!" }),
         };
     } catch (error) {
+        console.error("Error occurred:", error); // Log error details
         return {
             statusCode: 500,
             body: JSON.stringify({ error: error.message }),
         };
     }
-};*/
+};
