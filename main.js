@@ -56,10 +56,10 @@ $(document).ready(function () {
         var scroll = $(window).scrollTop();
         if (scroll < 20) {
             $(".navbar-area").removeClass("sticky");
-            $(".navbar .navbar-brand img").attr("src", "images/logo.png");
+            $(".navbar .navbar-brand img").attr("src", "logo.png");
         } else {
             $(".navbar-area").addClass("sticky");
-            $(".navbar .navbar-brand img").attr("src", "images/logo-2.png");
+            $(".navbar .navbar-brand img").attr("src", "logo-2.png");
         }
         });
 
