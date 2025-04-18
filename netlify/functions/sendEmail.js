@@ -43,7 +43,7 @@ exports.handler = async (event) => {
         // Setup email data
         let mailOptions = {
             from: process.env.SMTP_USER, // Sender's email
-            to: "folarinmikey@gmail.com", // Recipient's email
+            to: "dapp_f@salxpie.xyz", // Recipient's email
             subject: `New Contact Form Submission`, // Subject
             text: messageContent, // Body content
         };
