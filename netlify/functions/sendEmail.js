@@ -1,4 +1,4 @@
-const nodemailer = require("nodemailer");
+onst nodemailer = require("nodemailer");
 
 exports.handler = async (event) => {
     try {
@@ -48,7 +48,7 @@ exports.handler = async (event) => {
             text: messageContent, // Body content
         };
 
-        // Send the email
+        // Send the emaily
         let info = await transporter.sendMail(mailOptions);
         console.log("Email sent:", info.response); // Log success message
 
